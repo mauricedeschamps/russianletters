@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian Alphabet Learner</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #f0f0f0;
+            --card-bg: #1e1e1e;
+            --accent-color: #ff5252;
+            --secondary-color: #ffeb3b;
+        }
+
+        .light-mode {
+            --bg-color: #f5f5f5;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --accent-color: #ff1744;
+            --secondary-color: #ffc107;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .mode-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .lang-btn {
+            background-color: var(--secondary-color);
+            color: #000;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .letter-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .letter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cyrillic {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .latin {
+            font-size: 18px;
+            opacity: 0;
+            height: 0;
+            transition: opacity 0.3s, height 0.3s;
+        }
+
+        .show-latin {
+            opacity: 1;
+            height: auto;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid var(--card-bg);
+        }
+
+        .contact {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .alphabet-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-icon">R</div>
+            <div class="controls">
+                <button class="mode-btn" id="modeToggle">☀️ Light Mode</button>
+                <button class="lang-btn" id="langToggle">🇷🇺 Русский</button>
+            </div>
+        </header>
+
+        <h1 id="title">Russian Alphabet</h1>
+
+        <div class="alphabet-grid" id="alphabetGrid">
+            <!-- Letters will be inserted here by JavaScript -->
+        </div>
+
+        <footer>
+            <a href="mailto:mementomorikatsu@gmail.com" class="contact" id="contactLink">
+                Contact me<br>mementomorikatsu@gmail.com
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // Alphabet data
+        const alphabetData = [
+            { cyrillic: 'А', latin: 'A', sound: 'а' },
+            { cyrillic: 'Б', latin: 'B', sound: 'б' },
+            { cyrillic: 'В', latin: 'V', sound: 'в' },
+            { cyrillic: 'Г', latin: 'G', sound: 'г' },
+            { cyrillic: 'Д', latin: 'D', sound: 'д' },
+            { cyrillic: 'Е', latin: 'Ye', sound: 'е' },
+            { cyrillic: 'Ё', latin: 'Yo', sound: 'ё' },
+            { cyrillic: 'Ж', latin: 'Zh', sound: 'ж' },
+            { cyrillic: 'З', latin: 'Z', sound: 'з' },
+            { cyrillic: 'И', latin: 'I', sound: 'и' },
+            { cyrillic: 'Й', latin: 'Y', sound: 'й' },
+            { cyrillic: 'К', latin: 'K', sound: 'к' },
+            { cyrillic: 'Л', latin: 'L', sound: 'л' },
+            { cyrillic: 'М', latin: 'M', sound: 'м' },
+            { cyrillic: 'Н', latin: 'N', sound: 'н' },
+            { cyrillic: 'О', latin: 'O', sound: 'о' },
+            { cyrillic: 'П', latin: 'P', sound: 'п' },
+            { cyrillic: 'Р', latin: 'R', sound: 'р' },
+            { cyrillic: 'С', latin: 'S', sound: 'с' },
+            { cyrillic: 'Т', latin: 'T', sound: 'т' },
+            { cyrillic: 'У', latin: 'U', sound: 'у' },
+            { cyrillic: 'Ф', latin: 'F', sound: 'ф' },
+            { cyrillic: 'Х', latin: 'Kh', sound: 'х' },
+            { cyrillic: 'Ц', latin: 'Ts', sound: 'ц' },
+            { cyrillic: 'Ч', latin: 'Ch', sound: 'ч' },
+            { cyrillic: 'Ш', latin: 'Sh', sound: 'ш' },
+            { cyrillic: 'Щ', latin: 'Shch', sound: 'щ' },
+            { cyrillic: 'Ъ', latin: '"', sound: 'твёрдый знак' },
+            { cyrillic: 'Ы', latin: 'Y', sound: 'ы' },
+            { cyrillic: 'Ь', latin: "'", sound: 'мягкий знак' },
+            { cyrillic: 'Э', latin: 'E', sound: 'э' },
+            { cyrillic: 'Ю', latin: 'Yu', sound: 'ю' },
+            { cyrillic: 'Я', latin: 'Ya', sound: 'я' }
+        ];
+
+        // Translations
+        const translations = {
+            en: {
+                title: "Russian Alphabet",
+                modeToggle: "☀️ Light Mode",
+                langToggle: "🇷🇺 Русский",
+                contact: "Contact me<br>mementomorikatsu@gmail.com"
+            },
+            ru: {
+                title: "Русский Алфавит",
+                modeToggle: "🌙 Темный Режим",
+                langToggle: "🇬🇧 English",
+                contact: "Свяжитесь со мной<br>mementomorikatsu@gmail.com"
+            }
+        };
+
+        // DOM elements
+        const alphabetGrid = document.getElementById('alphabetGrid');
+        const modeToggle = document.getElementById('modeToggle');
+        const langToggle = document.getElementById('langToggle');
+        const title = document.getElementById('title');
+        const contactLink = document.getElementById('contactLink');
+
+        // Initialize
+        let darkMode = true;
+        let currentLang = 'en';
+
+        // Create letter cards
+        function createLetterCards() {
+            alphabetGrid.innerHTML = '';
+            alphabetData.forEach(letter => {
+                const card = document.createElement('div');
+                card.className = 'letter-card';
+                card.innerHTML = `
+                    <div class="cyrillic">${letter.cyrillic}</div>
+                    <div class="latin">${letter.latin}</div>
+                `;
+                card.addEventListener('click', () => {
+                    // Toggle latin letter visibility
+                    const latinElement = card.querySelector('.latin');
+                    latinElement.classList.toggle('show-latin');
+                    
+                    // Play sound
+                    speakRussian(letter.sound);
+                });
+                alphabetGrid.appendChild(card);
+            });
+        }
+
+        // Text-to-speech for Russian
+        function speakRussian(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ru-RU';
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Text-to-speech is not supported in your browser');
+            }
+        }
+
+        // Toggle dark/light mode
+        function toggleMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('light-mode');
+            modeToggle.textContent = darkMode ? translations[currentLang].modeToggle : 
+                (currentLang === 'en' ? '🌙 Dark Mode' : '🌙 Темный Режим');
+        }
+
+        // Toggle language
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ru' : 'en';
+            updateTexts();
+        }
+
+        // Update all texts based on current language
+        function updateTexts() {
+            title.textContent = translations[currentLang].title;
+            modeToggle.textContent = darkMode ? translations[currentLang].modeToggle : 
+                (currentLang === 'en' ? '🌙 Dark Mode' : '🌙 Темный Режим');
+            langToggle.textContent = currentLang === 'en' ? '🇷🇺 Русский' : '🇬🇧 English';
+            contactLink.innerHTML = translations[currentLang].contact;
+        }
+
+        // Event listeners
+        modeToggle.addEventListener('click', toggleMode);
+        langToggle.addEventListener('click', toggleLanguage);
+
+        // Initialize app
+        createLetterCards();
+        updateTexts();
+    </script>
+</body>
+</html>
