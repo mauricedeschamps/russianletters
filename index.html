@@ -60,6 +60,7 @@
         .controls {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -79,6 +80,11 @@
         .lang-btn {
             background-color: var(--secondary-color);
             color: #000;
+        }
+
+        .case-btn {
+            background-color: #4CAF50;
+            color: white;
         }
 
         h1 {
@@ -144,6 +150,11 @@
             .alphabet-grid {
                 grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             }
+            
+            .controls {
+                flex-direction: column;
+                align-items: flex-end;
+            }
         }
     </style>
 </head>
@@ -153,6 +164,7 @@
             <div class="app-icon">R</div>
             <div class="controls">
                 <button class="mode-btn" id="modeToggle">☀️ Light Mode</button>
+                <button class="case-btn" id="caseToggle">🔠 Lowercase</button>
                 <button class="lang-btn" id="langToggle">🇷🇺 Русский</button>
             </div>
         </header>
@@ -173,39 +185,39 @@
     <script>
         // Alphabet data
         const alphabetData = [
-            { cyrillic: 'А', latin: 'A', sound: 'а' },
-            { cyrillic: 'Б', latin: 'B', sound: 'б' },
-            { cyrillic: 'В', latin: 'V', sound: 'в' },
-            { cyrillic: 'Г', latin: 'G', sound: 'г' },
-            { cyrillic: 'Д', latin: 'D', sound: 'д' },
-            { cyrillic: 'Е', latin: 'Ye', sound: 'е' },
-            { cyrillic: 'Ё', latin: 'Yo', sound: 'ё' },
-            { cyrillic: 'Ж', latin: 'Zh', sound: 'ж' },
-            { cyrillic: 'З', latin: 'Z', sound: 'з' },
-            { cyrillic: 'И', latin: 'I', sound: 'и' },
-            { cyrillic: 'Й', latin: 'Y', sound: 'й' },
-            { cyrillic: 'К', latin: 'K', sound: 'к' },
-            { cyrillic: 'Л', latin: 'L', sound: 'л' },
-            { cyrillic: 'М', latin: 'M', sound: 'м' },
-            { cyrillic: 'Н', latin: 'N', sound: 'н' },
-            { cyrillic: 'О', latin: 'O', sound: 'о' },
-            { cyrillic: 'П', latin: 'P', sound: 'п' },
-            { cyrillic: 'Р', latin: 'R', sound: 'р' },
-            { cyrillic: 'С', latin: 'S', sound: 'с' },
-            { cyrillic: 'Т', latin: 'T', sound: 'т' },
-            { cyrillic: 'У', latin: 'U', sound: 'у' },
-            { cyrillic: 'Ф', latin: 'F', sound: 'ф' },
-            { cyrillic: 'Х', latin: 'Kh', sound: 'х' },
-            { cyrillic: 'Ц', latin: 'Ts', sound: 'ц' },
-            { cyrillic: 'Ч', latin: 'Ch', sound: 'ч' },
-            { cyrillic: 'Ш', latin: 'Sh', sound: 'ш' },
-            { cyrillic: 'Щ', latin: 'Shch', sound: 'щ' },
-            { cyrillic: 'Ъ', latin: '"', sound: 'твёрдый знак' },
-            { cyrillic: 'Ы', latin: 'Y', sound: 'ы' },
-            { cyrillic: 'Ь', latin: "'", sound: 'мягкий знак' },
-            { cyrillic: 'Э', latin: 'E', sound: 'э' },
-            { cyrillic: 'Ю', latin: 'Yu', sound: 'ю' },
-            { cyrillic: 'Я', latin: 'Ya', sound: 'я' }
+            { cyrillic: 'А', cyrillicLower: 'а', latin: 'A', latinLower: 'a', sound: 'а' },
+            { cyrillic: 'Б', cyrillicLower: 'б', latin: 'B', latinLower: 'b', sound: 'б' },
+            { cyrillic: 'В', cyrillicLower: 'в', latin: 'V', latinLower: 'v', sound: 'в' },
+            { cyrillic: 'Г', cyrillicLower: 'г', latin: 'G', latinLower: 'g', sound: 'г' },
+            { cyrillic: 'Д', cyrillicLower: 'д', latin: 'D', latinLower: 'd', sound: 'д' },
+            { cyrillic: 'Е', cyrillicLower: 'е', latin: 'Ye', latinLower: 'ye', sound: 'е' },
+            { cyrillic: 'Ё', cyrillicLower: 'ё', latin: 'Yo', latinLower: 'yo', sound: 'ё' },
+            { cyrillic: 'Ж', cyrillicLower: 'ж', latin: 'Zh', latinLower: 'zh', sound: 'ж' },
+            { cyrillic: 'З', cyrillicLower: 'з', latin: 'Z', latinLower: 'z', sound: 'з' },
+            { cyrillic: 'И', cyrillicLower: 'и', latin: 'I', latinLower: 'i', sound: 'и' },
+            { cyrillic: 'Й', cyrillicLower: 'й', latin: 'Y', latinLower: 'y', sound: 'й' },
+            { cyrillic: 'К', cyrillicLower: 'к', latin: 'K', latinLower: 'k', sound: 'к' },
+            { cyrillic: 'Л', cyrillicLower: 'л', latin: 'L', latinLower: 'l', sound: 'л' },
+            { cyrillic: 'М', cyrillicLower: 'м', latin: 'M', latinLower: 'm', sound: 'м' },
+            { cyrillic: 'Н', cyrillicLower: 'н', latin: 'N', latinLower: 'n', sound: 'н' },
+            { cyrillic: 'О', cyrillicLower: 'о', latin: 'O', latinLower: 'o', sound: 'о' },
+            { cyrillic: 'П', cyrillicLower: 'п', latin: 'P', latinLower: 'p', sound: 'п' },
+            { cyrillic: 'Р', cyrillicLower: 'р', latin: 'R', latinLower: 'r', sound: 'р' },
+            { cyrillic: 'С', cyrillicLower: 'с', latin: 'S', latinLower: 's', sound: 'с' },
+            { cyrillic: 'Т', cyrillicLower: 'т', latin: 'T', latinLower: 't', sound: 'т' },
+            { cyrillic: 'У', cyrillicLower: 'у', latin: 'U', latinLower: 'u', sound: 'у' },
+            { cyrillic: 'Ф', cyrillicLower: 'ф', latin: 'F', latinLower: 'f', sound: 'ф' },
+            { cyrillic: 'Х', cyrillicLower: 'х', latin: 'Kh', latinLower: 'kh', sound: 'х' },
+            { cyrillic: 'Ц', cyrillicLower: 'ц', latin: 'Ts', latinLower: 'ts', sound: 'ц' },
+            { cyrillic: 'Ч', cyrillicLower: 'ч', latin: 'Ch', latinLower: 'ch', sound: 'ч' },
+            { cyrillic: 'Ш', cyrillicLower: 'ш', latin: 'Sh', latinLower: 'sh', sound: 'ш' },
+            { cyrillic: 'Щ', cyrillicLower: 'щ', latin: 'Shch', latinLower: 'shch', sound: 'щ' },
+            { cyrillic: 'Ъ', cyrillicLower: 'ъ', latin: '"', latinLower: '"', sound: 'твёрдый знак' },
+            { cyrillic: 'Ы', cyrillicLower: 'ы', latin: 'Y', latinLower: 'y', sound: 'ы' },
+            { cyrillic: 'Ь', cyrillicLower: 'ь', latin: "'", latinLower: "'", sound: 'мягкий знак' },
+            { cyrillic: 'Э', cyrillicLower: 'э', latin: 'E', latinLower: 'e', sound: 'э' },
+            { cyrillic: 'Ю', cyrillicLower: 'ю', latin: 'Yu', latinLower: 'yu', sound: 'ю' },
+            { cyrillic: 'Я', cyrillicLower: 'я', latin: 'Ya', latinLower: 'ya', sound: 'я' }
         ];
 
         // Translations
@@ -213,12 +225,16 @@
             en: {
                 title: "Russian Alphabet",
                 modeToggle: "☀️ Light Mode",
+                caseToggleUpper: "🔠 Lowercase",
+                caseToggleLower: "🔠 Uppercase",
                 langToggle: "🇷🇺 Русский",
                 contact: "Contact me<br>mementomorikatsu@gmail.com"
             },
             ru: {
                 title: "Русский Алфавит",
                 modeToggle: "🌙 Темный Режим",
+                caseToggleUpper: "🔠 Строчные буквы",
+                caseToggleLower: "🔠 Заглавные буквы",
                 langToggle: "🇬🇧 English",
                 contact: "Свяжитесь со мной<br>mementomorikatsu@gmail.com"
             }
@@ -227,6 +243,7 @@
         // DOM elements
         const alphabetGrid = document.getElementById('alphabetGrid');
         const modeToggle = document.getElementById('modeToggle');
+        const caseToggle = document.getElementById('caseToggle');
         const langToggle = document.getElementById('langToggle');
         const title = document.getElementById('title');
         const contactLink = document.getElementById('contactLink');
@@ -234,6 +251,7 @@
         // Initialize
         let darkMode = true;
         let currentLang = 'en';
+        let uppercaseMode = true;
 
         // Create letter cards
         function createLetterCards() {
@@ -242,8 +260,8 @@
                 const card = document.createElement('div');
                 card.className = 'letter-card';
                 card.innerHTML = `
-                    <div class="cyrillic">${letter.cyrillic}</div>
-                    <div class="latin">${letter.latin}</div>
+                    <div class="cyrillic">${uppercaseMode ? letter.cyrillic : letter.cyrillicLower}</div>
+                    <div class="latin">${uppercaseMode ? letter.latin : letter.latinLower}</div>
                 `;
                 card.addEventListener('click', () => {
                     // Toggle latin letter visibility
@@ -272,8 +290,14 @@
         function toggleMode() {
             darkMode = !darkMode;
             document.body.classList.toggle('light-mode');
-            modeToggle.textContent = darkMode ? translations[currentLang].modeToggle : 
-                (currentLang === 'en' ? '🌙 Dark Mode' : '🌙 Темный Режим');
+            updateTexts();
+        }
+
+        // Toggle uppercase/lowercase
+        function toggleCase() {
+            uppercaseMode = !uppercaseMode;
+            createLetterCards();
+            updateTexts();
         }
 
         // Toggle language
@@ -282,17 +306,19 @@
             updateTexts();
         }
 
-        // Update all texts based on current language
+        // Update all texts based on current language and modes
         function updateTexts() {
             title.textContent = translations[currentLang].title;
             modeToggle.textContent = darkMode ? translations[currentLang].modeToggle : 
                 (currentLang === 'en' ? '🌙 Dark Mode' : '🌙 Темный Режим');
+            caseToggle.textContent = uppercaseMode ? translations[currentLang].caseToggleUpper : translations[currentLang].caseToggleLower;
             langToggle.textContent = currentLang === 'en' ? '🇷🇺 Русский' : '🇬🇧 English';
             contactLink.innerHTML = translations[currentLang].contact;
         }
 
         // Event listeners
         modeToggle.addEventListener('click', toggleMode);
+        caseToggle.addEventListener('click', toggleCase);
         langToggle.addEventListener('click', toggleLanguage);
 
         // Initialize app
